@@ -10,9 +10,18 @@ router.get('/string', async (ctx, next) => {
   ctx.body = 'koa2 string'
 })
 
+// todo 测试session
 router.get('/json', async (ctx, next) => {
+
+  const session = ctx.session;
+  if(session.num===null){
+    session.num = 0;
+  }
+  session.num++;
+
   ctx.body = {
-    title: 'koa2 json'
+    title: 'koa2 json',
+    viewNum: session.num
   }
 })
 

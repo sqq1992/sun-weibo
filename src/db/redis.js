@@ -9,11 +9,12 @@ redisClient.on('error', (err) => {
 });
 
 
-function setRedisVal(key, val) {
-    if(typeof val==="object"){
+function setRedisVal(key, val, timeout = 60 * 60) {
+    if (typeof val === "object") {
         val = JSON.stringify(val);
     }
     redisClient.set(key, val, redis.print);
+    redisClient.expire(key, timeout);   //timeout 单位:秒
 }
 
 function getRedisVal(key) {
