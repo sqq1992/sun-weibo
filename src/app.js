@@ -9,7 +9,8 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 
 const index = require('./routes')
-const users = require('./routes/users')
+const userApi = require('./routes/api/userApi');
+const userRouterView = require('./routes/views/userRouterView')
 const error = require('./routes/views/error')
 const {REDIS_CONFIG} = require("./conf/db");
 
@@ -18,6 +19,7 @@ onerror(app)
 
 // middlewares
 app.use(bodyparser({
+  httpOnly: true,
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
@@ -43,7 +45,6 @@ app.use(session({
   prefix: 'weibo.sess',
   cookie: {
     path: '/',
-    httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000
   },
   // ttl: 24 * 60 * 60 * 1000,   //session 过期时间
@@ -54,9 +55,17 @@ app.use(session({
 
 
 // routes
+
+// 测试路由
 app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+
+// api路由
+app.use(userApi.routes(), userApi.allowedMethods());
+
+// 页面路由
+app.use(userRouterView.routes(), userRouterView.allowedMethods())
 app.use(error.routes(), error.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {

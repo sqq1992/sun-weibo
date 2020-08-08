@@ -61,7 +61,6 @@
         })
     }
 
-    // 统一的处理
     function ajaxFn(method, url, params, callback) {
         $.ajax({
             type: method.toUpperCase(),
@@ -69,7 +68,7 @@
             contentType: 'application/json;charset=UTF-8',
             data: params ? JSON.stringify(params) : '',
             success: function(res) {
-                if (res.errno !== 0) {
+                if (!res.success) {
                     // 错误
                     callback(res.message)
                     return

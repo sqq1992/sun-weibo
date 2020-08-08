@@ -1,6 +1,7 @@
 const seq = require('./seq');
 
-// require('./model');
+// 引入要建立的数据模型
+require('./model');
 
 
 // 测试连接

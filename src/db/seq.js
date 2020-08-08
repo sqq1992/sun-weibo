@@ -18,10 +18,5 @@ if(env==="production"){
     };
 }
 
-
-
 const seq = new Sequelize(database, user, password, config);
-
-
-
 module.exports = seq;
