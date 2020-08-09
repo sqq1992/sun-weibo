@@ -4,11 +4,13 @@ const {get} = require('lodash');
 
 async function handleSearchUser({
     userName = '',
+    ...extraParams
 }) {
     const userInfo = await userSeq.findOne({
         attributes: ['userName', 'password', 'nickName', 'gender', 'picture', 'city'],
         where:{
-            userName
+            userName,
+            ...extraParams
         }
     })
 

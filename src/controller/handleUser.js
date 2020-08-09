@@ -1,3 +1,5 @@
+const {formatUserInfo} = require("../utils/format");
+const {doCrypto} = require("../utils/utils");
 const {SuccessDataModel,ErrorDataModel} = require("../model/resModel");
 const {handleSearchUser, handleInsertUser} = require("../service/userService");
 const {isEmpty,pick} = require('lodash');
@@ -24,9 +26,10 @@ async function handleRegisterUser(ctx, next){
         return new ErrorDataModel('该帐号已存在!')
     }
 
-    let {userName,nickName} = ctx.request.body;
+    let {userName,password,nickName} = ctx.request.body;
     let registerUserInfo = await handleInsertUser({
-        ...pick(ctx.request.body, ['userName', 'password', 'gender']),
+        ...pick(ctx.request.body, ['userName', 'gender']),
+        password:doCrypto(password),
         nickName: nickName ? nickName : userName
     });
 
@@ -37,11 +40,26 @@ async function handleRegisterUser(ctx, next){
     return new ErrorDataModel('注册失败!')
 }
 
+async function handleLoginUser(ctx, next){
 
+    let {userName,password} = ctx.request.body;
+    let userInfo = await handleSearchUser({
+        userName,
+        password: doCrypto(password)
+    })
+
+    if(!isEmpty(userInfo)){
+        ctx.session.userInfo = formatUserInfo(userInfo);
+        return new SuccessDataModel('登录成功!')
+    }
+
+    return new ErrorDataModel('帐号或密码有误!')
+}
 
 
 
 module.exports = {
     handleIsExitUser,
-    handleRegisterUser
+    handleRegisterUser,
+    handleLoginUser
 };

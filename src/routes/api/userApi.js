@@ -1,4 +1,5 @@
-const {handleIsExitUser,handleRegisterUser} = require("../../controller/handleUser");
+const {validateUserInfo} = require("../../middleWares/valiator");
+const {handleIsExitUser,handleRegisterUser,handleLoginUser} = require("../../controller/handleUser");
 const router = require('koa-router')()
 
 router.prefix('/api/user')
@@ -9,8 +10,13 @@ router.post('/isExist', async (ctx, next) => {
   ctx.body = result
 })
 
-router.post('/register', async (ctx, next) => {
+router.post('/register', validateUserInfo, async (ctx, next) => {
   let result = await handleRegisterUser(ctx, next);
+  ctx.body = result
+});
+
+router.post('/login', async (ctx, next) => {
+  let result = await handleLoginUser(ctx, next);
   ctx.body = result
 })
 

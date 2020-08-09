@@ -14,18 +14,19 @@
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-convert": "^1.2.0",
+    "koa-generic-session": "^2.0.4",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
     "koa-onerror": "^4.1.0",
+    "koa-redis": "^4.0.1",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
-    "koa-generic-session": "^2.0.4",
-    "koa-redis": "^4.0.1",
     "lodash": "^4.17.19",
     "mysql2": "^2.1.0",
-    "sequelize": "^6.3.4",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "ajv": "^6.12.3",
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
