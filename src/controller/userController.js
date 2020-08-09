@@ -1,3 +1,4 @@
+const {updateUserInfoDb} = require("../service/userService");
 const {formatUserInfo} = require("../utils/format");
 const {doCrypto} = require("../utils/utils");
 const {SuccessDataModel,ErrorDataModel} = require("../model/resModel");
@@ -56,10 +57,30 @@ async function handleLoginUser(ctx, next){
     return new ErrorDataModel('帐号或密码有误!')
 }
 
+async function handleUpdateUserInfoCtl(ctx, updateParams, searchParams) {
 
+    let result = await updateUserInfoDb(updateParams, searchParams);
+
+    if (result) {
+        ctx.session.userInfo = formatUserInfo({
+            ...ctx.session.userInfo,
+            ...updateParams
+        })
+        return new SuccessDataModel('修改成功!')
+    }
+
+    return new ErrorDataModel('修改失败!')
+}
+
+async function handleLogout(ctx){
+    delete ctx.session.userInfo;
+    return new SuccessDataModel();
+}
 
 module.exports = {
     handleIsExitUser,
     handleRegisterUser,
-    handleLoginUser
+    handleLoginUser,
+    handleUpdateUserInfoCtl,
+    handleLogout
 };

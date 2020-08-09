@@ -46,7 +46,7 @@
             processData: false,
             data: formData,
             success: function(res) {
-                if (res.errno !== 0) {
+                if (!res.success) {
                     // 错误
                     callback(res.message)
                     return

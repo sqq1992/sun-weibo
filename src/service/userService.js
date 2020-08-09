@@ -26,8 +26,22 @@ async function handleInsertUser(params){
     return get(userInfo,'dataValues',{})
 }
 
+async function updateUserInfoDb(updateParams,searchParams){
+
+    const userInfo = await userSeq.update({
+        ...updateParams
+    }, {
+        where: {
+            ...searchParams
+        }
+    });
+
+    return !!userInfo[0];
+}
+
 
 module.exports = {
     handleSearchUser,
-    handleInsertUser
+    handleInsertUser,
+    updateUserInfoDb
 };

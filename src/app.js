@@ -7,11 +7,14 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger');
 const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
+const koaStatic = require('koa-static');
 
 const index = require('./routes')
 const userApi = require('./routes/api/userApi');
+const utilsApi = require('./routes/api/utilsApi');
 const userRouterView = require('./routes/views/userRouterView')
 const error = require('./routes/views/error')
+const {targetFilePath} = require("./conf/global");
 const {REDIS_CONFIG} = require("./conf/db");
 
 // error handler
@@ -24,7 +27,10 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+
+//todo 静态文件
+app.use(koaStatic(__dirname + '/public'))
+app.use(koaStatic(targetFilePath))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
@@ -61,6 +67,7 @@ app.use(index.routes(), index.allowedMethods())
 
 // api路由
 app.use(userApi.routes(), userApi.allowedMethods());
+app.use(utilsApi.routes(), utilsApi.allowedMethods());
 
 // 页面路由
 app.use(userRouterView.routes(), userRouterView.allowedMethods())
