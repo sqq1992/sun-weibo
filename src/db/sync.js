@@ -13,7 +13,7 @@ seq.authenticate().then(()=>{
 
 
 // 执行
-seq.sync({force: true}).then(()=>{
+seq.sync({force: false}).then(()=>{
     console.log('sync ok');
     process.exit();
 })

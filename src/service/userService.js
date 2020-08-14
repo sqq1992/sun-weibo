@@ -7,7 +7,7 @@ async function handleSearchUser({
     ...extraParams
 }) {
     const userInfo = await userSeq.findOne({
-        attributes: ['userName', 'password', 'nickName', 'gender', 'picture', 'city'],
+        attributes: ['id', 'userName', 'password', 'nickName', 'gender', 'picture', 'city'],
         where:{
             userName,
             ...extraParams
