@@ -14,6 +14,7 @@ const userRouterView = require('./routes/views/userRouterView');
 
 const userApi = require('./routes/api/userApi');
 const blogOperateApi = require('./routes/api/blogOperateApi');
+const blogProfileApi = require('./routes/api/blogProfileApi');
 const utilsApi = require('./routes/api/utilsApi');
 
 const error = require('./routes/views/error')
@@ -68,6 +69,7 @@ app.use(session({
 app.use(userApi.routes(), userApi.allowedMethods());
 app.use(utilsApi.routes(), utilsApi.allowedMethods());
 app.use(blogOperateApi.routes(), blogOperateApi.allowedMethods());
+app.use(blogProfileApi.routes(), blogProfileApi.allowedMethods());
 
 // 页面路由
 app.use(blogRouterView.routes(), blogRouterView.allowedMethods())
