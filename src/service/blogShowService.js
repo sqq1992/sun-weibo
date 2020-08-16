@@ -9,6 +9,11 @@ async function getBlogListService({
     pageSize = 10
 }){
 
+    let whereOptions = {};
+    if(userName){
+        whereOptions.userName = userName;
+    }
+
     const blogInfo = await blogsSeq.findAndCountAll({
         order: [
             ['id', 'desc']
@@ -18,7 +23,7 @@ async function getBlogListService({
                 model: userSeq,
                 attributes: ['id', 'userName', 'password', 'nickName', 'gender', 'picture', 'city'],
                 where: {
-                    userName
+                    ...whereOptions
                 },
             }
         ],
@@ -42,7 +47,7 @@ async function getBlogListService({
 
     return {
         count,
-        isEmpty: count === 0,
+        isEmpty: blogList.length === 0,
         blogList,
         pageIndex,
         pageSize

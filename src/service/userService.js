@@ -1,5 +1,5 @@
 
-const {userSeq} = require('../db/model');
+const {userSeq,userRelationsSeq} = require('../db/model');
 const {get} = require('lodash');
 
 async function handleSearchUser({
@@ -39,9 +39,38 @@ async function updateUserInfoDb(updateParams,searchParams){
     return !!userInfo[0];
 }
 
+async function getUserListByFollowerIdDb(followerId){
+
+    const result = await userSeq.findAndCountAll({
+        order: [
+            ['id', 'desc']
+        ],
+        include: [
+            {
+                model: userRelationsSeq,
+                where: {
+                    followerId
+                },
+            }
+        ],
+    })
+
+    let list = result.rows.map((elem)=>{
+        return get(elem, 'dataValues', {});
+    })
+
+
+    return {
+        count: result.count,
+        list
+    }
+
+}
+
 
 module.exports = {
     handleSearchUser,
     handleInsertUser,
-    updateUserInfoDb
+    updateUserInfoDb,
+    getUserListByFollowerIdDb
 };
