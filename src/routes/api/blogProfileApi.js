@@ -1,4 +1,4 @@
-const {handleGetBlogList} = require("../../controller/blogShowController");
+const {handleGetBlogList, handleAddFollow, handleDeleteFollow} = require("../../controller/blogShowController");
 const {loginCheckApi} = require("../../middleWares/loginCheck");
 
 const router = require('koa-router')()
@@ -18,6 +18,22 @@ router.get('/loadMore/:userName/:pageIndex', loginCheckApi, async (ctx, next) =>
   ctx.body = result
 })
 
+router.post('/follow', loginCheckApi, async (ctx, next) => {
 
+    let {userId:followerId} = ctx.request.body;
+    let {id: myUserId} = ctx.session.userInfo;
+
+    ctx.body = await handleAddFollow(myUserId, followerId);
+
+});
+
+router.post('/unFollow', loginCheckApi, async (ctx, next) => {
+
+    let {userId:followerId} = ctx.request.body;
+    let {id: myUserId} = ctx.session.userInfo;
+
+    ctx.body = await handleDeleteFollow(myUserId, followerId);
+
+});
 
 module.exports = router

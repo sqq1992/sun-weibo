@@ -1,3 +1,4 @@
+const {getFollowerDataCtr} = require("../../controller/userController");
 const {getFansDataCtr,handleGetUserInfoCtr} = require("../../controller/userController");
 const {handleGetBlogList} = require("../../controller/blogShowController");
 const {loginRedirect,loginCheckApi} = require("../../middleWares/loginCheck");
@@ -26,18 +27,36 @@ router.get('/profile/:userName', loginRedirect,async (ctx, next) => {
     pageSize: 5
   })
 
-  const currentUserInfo = await handleGetUserInfoCtr({
-    userName
-  });
+  let isMe = userName === currentLoginUserInfo.userName;
+  let currentUserInfo = {};
+  if(isMe){
+    currentUserInfo = currentLoginUserInfo;
+  }else {
+    currentUserInfo = await handleGetUserInfoCtr({
+      userName
+    });
+    currentUserInfo = currentUserInfo.data;
+  }
 
-  const fansData = await getFansDataCtr(currentUserInfo.data.id);
+  //获取粉丝的数据
+  const fansData = await getFansDataCtr(currentUserInfo.id);
+
+  const amIFollowed = fansData.data.list.some((elem)=>{
+    return elem.userName === userName;
+  })
+
+  //获取关注人的数据
+  const followerData = await getFollowerDataCtr(currentUserInfo.id);
+
 
   await ctx.render('profile', {
     blogData: result.data,
-    userData:{
-      userInfo: ctx.session.userInfo,
-      isMe: userName === currentLoginUserInfo.userName,
-      fansData: fansData.data
+    userData: {
+      userInfo: currentUserInfo,
+      isMe,
+      fansData: fansData.data,
+      followersData: followerData.data,
+      amIFollowed
     },
   });
 })

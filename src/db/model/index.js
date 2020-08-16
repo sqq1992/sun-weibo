@@ -7,10 +7,10 @@ blogsSeq.belongsTo(userSeq,{
 })
 
 userRelationsSeq.belongsTo(userSeq,{
-    foreignKey: 'userId'
+    foreignKey: 'followerId'
 })
 userSeq.hasMany(userRelationsSeq,{
-    foreignKey: 'followerId'
+    foreignKey: 'userId'
 })
 
 module.exports = {

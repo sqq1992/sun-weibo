@@ -39,7 +39,7 @@ async function updateUserInfoDb(updateParams,searchParams){
     return !!userInfo[0];
 }
 
-async function getUserListByFollowerIdDb(followerId){
+async function getUserListByFansIdDb(followerId){
 
     const result = await userSeq.findAndCountAll({
         order: [
@@ -67,10 +67,64 @@ async function getUserListByFollowerIdDb(followerId){
 
 }
 
+async function getUserListByFollowerIdDb(userId){
+
+    const result = await userRelationsSeq.findAndCountAll({
+        order: [
+            ['id', 'desc']
+        ],
+        include: [
+            {
+                model: userSeq,
+                attributes: ['id', 'userName', 'nickName', 'picture']
+            }
+        ],
+        where: {
+            userId,
+        }
+    })
+
+    let list = result.rows.map((elem)=>{
+        return get(elem, 'dataValues.user.dataValues', {});
+    })
+
+    return {
+        count: result.count,
+        list
+    }
+
+}
+
+
+
+async function addFollowDb(myUserId,followerId) {
+
+    const relationResult = await userRelationsSeq.create({
+        userId:myUserId,
+        followerId
+    })
+
+    return get(relationResult,'dataValues',{})
+}
+
+async function deleteFollowDb(myUserId,followerId) {
+
+    const relationResult = await userRelationsSeq.destroy({
+        where: {
+            userId:myUserId,
+            followerId
+        }
+    })
+
+    return !!relationResult;
+}
 
 module.exports = {
     handleSearchUser,
     handleInsertUser,
     updateUserInfoDb,
+    getUserListByFansIdDb,
+    addFollowDb,
+    deleteFollowDb,
     getUserListByFollowerIdDb
 };

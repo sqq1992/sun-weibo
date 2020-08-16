@@ -1,4 +1,4 @@
-const {getUserListByFollowerIdDb} = require("../service/userService");
+const {getUserListByFansIdDb, getUserListByFollowerIdDb} = require("../service/userService");
 const {updateUserInfoDb} = require("../service/userService");
 const {formatUserInfo} = require("../utils/format");
 const {doCrypto} = require("../utils/utils");
@@ -94,6 +94,11 @@ async function handleLogout(ctx){
 
 async function getFansDataCtr(userId) {
 
+    let result = await getUserListByFansIdDb(userId)
+    return new SuccessDataModel(result)
+}
+
+async function getFollowerDataCtr(userId) {
     let result = await getUserListByFollowerIdDb(userId)
     return new SuccessDataModel(result)
 }
@@ -105,5 +110,6 @@ module.exports = {
     handleUpdateUserInfoCtl,
     handleLogout,
     getFansDataCtr,
-    handleGetUserInfoCtr
+    handleGetUserInfoCtr,
+    getFollowerDataCtr
 };
