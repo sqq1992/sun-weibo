@@ -1,6 +1,7 @@
 
 const {userSeq,userRelationsSeq} = require('../db/model');
 const {get} = require('lodash');
+const Sequelize = require('sequelize')
 
 async function handleSearchUser({
     userName = '',
@@ -49,7 +50,10 @@ async function getUserListByFansIdDb(followerId){
             {
                 model: userRelationsSeq,
                 where: {
-                    followerId
+                    followerId,
+                    userId: {
+                        [Sequelize.Op.ne]: followerId
+                    }
                 },
             }
         ],
@@ -81,6 +85,9 @@ async function getUserListByFollowerIdDb(userId){
         ],
         where: {
             userId,
+            followerId: {
+                [Sequelize.Op.ne]: userId
+            }
         }
     })
 

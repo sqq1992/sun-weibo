@@ -13,6 +13,12 @@ userSeq.hasMany(userRelationsSeq,{
     foreignKey: 'userId'
 })
 
+blogsSeq.belongsTo(userRelationsSeq,{
+    foreignKey: 'userId',
+    targetKey: 'followerId'
+})
+
+
 module.exports = {
     userSeq,
     blogsSeq,

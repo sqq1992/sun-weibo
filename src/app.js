@@ -13,6 +13,7 @@ const blogRouterView = require('./routes/views/blogView');
 const userRouterView = require('./routes/views/userRouterView');
 
 const userApi = require('./routes/api/userApi');
+const blogShowApi = require('./routes/api/blogShowApi');
 const blogOperateApi = require('./routes/api/blogOperateApi');
 const blogProfileApi = require('./routes/api/blogProfileApi');
 const blogSquareApi = require('./routes/api/blogSquareApi');
@@ -69,6 +70,7 @@ app.use(session({
 // api路由
 app.use(userApi.routes(), userApi.allowedMethods());
 app.use(utilsApi.routes(), utilsApi.allowedMethods());
+app.use(blogShowApi.routes(), blogShowApi.allowedMethods());
 app.use(blogOperateApi.routes(), blogOperateApi.allowedMethods());
 app.use(blogProfileApi.routes(), blogProfileApi.allowedMethods());
 app.use(blogSquareApi.routes(), blogSquareApi.allowedMethods());

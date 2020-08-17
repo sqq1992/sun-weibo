@@ -1,3 +1,4 @@
+const {getBlogListWithFollowerService} = require("../service/blogShowService");
 const {addFollowDb,deleteFollowDb} = require("../service/userService");
 const {getBlogListStr} = require("../utils/setTpl");
 const {getBlogListService} = require("../service/blogShowService");
@@ -22,6 +23,27 @@ async function handleGetBlogList({
 
     return new SuccessDataModel(blogInfo);
 }
+
+async function handleGetBlogListWithFollower({
+     userId = '',
+     pageIndex = 0,
+     pageSize = 10,
+     isShowTpl = false
+}){
+    let blogInfo = await getBlogListWithFollowerService({
+        userId,
+        pageIndex,
+        pageSize
+    });
+
+    if(isShowTpl){
+        blogInfo.blogListTpl = getBlogListStr(blogInfo.blogList);
+    }
+
+    return new SuccessDataModel(blogInfo);
+}
+
+
 
 async function handleAddFollow(myUserId,followerId) {
 
@@ -48,5 +70,6 @@ async function handleDeleteFollow(myUserId,followerId) {
 module.exports = {
     handleGetBlogList,
     handleAddFollow,
-    handleDeleteFollow
+    handleDeleteFollow,
+    handleGetBlogListWithFollower
 };

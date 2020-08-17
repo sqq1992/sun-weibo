@@ -1,3 +1,4 @@
+const {handleGetBlogListWithFollower} = require("../../controller/blogShowController");
 const {getFollowerDataCtr} = require("../../controller/userController");
 const {getFansDataCtr,handleGetUserInfoCtr} = require("../../controller/userController");
 const {handleGetBlogList} = require("../../controller/blogShowController");
@@ -5,11 +6,31 @@ const {loginRedirect,loginCheckApi} = require("../../middleWares/loginCheck");
 const router = require('koa-router')()
 
 router.get('/', loginRedirect,async (ctx, next) => {
-  await ctx.render('index', {
-    blogData:{
-      isEmpty: true
-    },
+
+
+  let userInfo = ctx.session.userInfo;
+
+
+  // let blogdata
+  let blogDataJson = await handleGetBlogListWithFollower({
+      userId: userInfo.id
   })
+
+  //获取粉丝的数据
+  const fansData = await getFansDataCtr(userInfo.id);
+
+  //获取关注人的数据
+  const followerData = await getFollowerDataCtr(userInfo.id);
+
+  await ctx.render('index', {
+    blogData: blogDataJson.data,
+    userData:{
+      userInfo,
+      isMe: true,
+      fansData: fansData.data,
+      followersData: followerData.data,
+    }
+  });
 })
 
 

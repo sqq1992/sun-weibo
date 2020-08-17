@@ -1,3 +1,4 @@
+const {handleAddFollow} = require("./blogShowController");
 const {getUserListByFansIdDb, getUserListByFollowerIdDb} = require("../service/userService");
 const {updateUserInfoDb} = require("../service/userService");
 const {formatUserInfo} = require("../utils/format");
@@ -50,6 +51,11 @@ async function handleRegisterUser(ctx, next){
     });
 
     if(registerUserInfo.id){
+
+        // 自己关注自己
+        handleAddFollow(registerUserInfo.id, registerUserInfo.id).then(()=>{
+        })
+
         return new SuccessDataModel('注册成功!')
     }
 
