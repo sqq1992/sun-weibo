@@ -1,4 +1,6 @@
+const {getFollowerDataCtr} = require("../../controller/userController");
 const {doCrypto} = require("../../utils/utils");
+const {get} = require('lodash');
 const {loginCheckApi} = require("../../middleWares/loginCheck");
 const {validateUserInfo} = require("../../middleWares/valiator");
 const {handleIsExitUser,handleRegisterUser,handleLoginUser,handleUpdateUserInfoCtl,handleLogout
@@ -55,6 +57,17 @@ router.post('/changePassword', loginCheckApi, validateUserInfo, async (ctx, next
 router.post('/logout', async (ctx, next) => {
   let result = await handleLogout(ctx, next);
   ctx.body = result
+})
+
+router.get('/getAtList', async (ctx, next) => {
+
+  let {id} = ctx.session.userInfo;
+  let result = await getFollowerDataCtr(id);
+  let list = get(result, 'data.list', []).map((elem) => {
+    return elem.userName
+  });
+
+  ctx.body = list
 })
 
 module.exports = router

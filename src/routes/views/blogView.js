@@ -7,9 +7,7 @@ const router = require('koa-router')()
 
 router.get('/', loginRedirect,async (ctx, next) => {
 
-
   let userInfo = ctx.session.userInfo;
-
 
   // let blogdata
   let blogDataJson = await handleGetBlogListWithFollower({

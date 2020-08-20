@@ -74,9 +74,9 @@ async function getBlogListWithFollowerService({
                 attributes: ['userId', 'followerId'],
                 where:{
                     userId,
-                    followerId: {
-                        [Sequelize.Op.ne]: userId
-                    }
+                    // followerId: {
+                    //     [Sequelize.Op.ne]: userId
+                    // }
                 }
             }
         ],
